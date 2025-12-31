@@ -1,0 +1,43 @@
+$k = 7
+$ETATS=[0..$k]
+$C=[vert, orange, bleu, rouge, rose]
+$ETAGES = [1..4]
+$t = [1..3]
+
+
+
+;; Exercice 1
+;; 1)
+bigand $i in $ETATS:
+  bigand $j in $t:
+    bigand $l in $ETAGES:
+      bigor $m in $C:
+        p($i,$j,$l,$m) or p($i,$j,$l,vide)
+      end
+    end
+  end
+end
+
+
+;; 2)
+bigand $i in $ETATS:
+  bigand $j in $t:
+    bigand $l in $ETAGES:
+      bigand $m in $C:
+        bigand $m1 in $C when $m1 != $m:
+          p($i,$j,$l,$m) or p($i,$j,$l,vide) => p($i,$j,$l,$m1)
+        end
+      end
+    end
+  end
+end
+
+
+;; 3)
+bigand $i in $ETATS:
+  bigand $j in $t:
+    bigand $k in $ETAGES when $k < 4:
+      p($i,$j,$k,vide) => p($i,$j,$k+1,vide)   
+    end
+  end
+end
