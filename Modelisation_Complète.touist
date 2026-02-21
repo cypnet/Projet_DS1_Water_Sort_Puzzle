@@ -21,7 +21,7 @@ p(0,3,3,vide)
 p(0,3,4,vide)
 
 
-;; Partie 1
+;; Partie 1 (Définition des états et contraintes de base)
 ;; 1) Chaque case contient une couleur ou vide
 bigand $i in $ETATS:
   bigand $j in $t:
@@ -58,7 +58,7 @@ bigand $i in $ETATS:
 end
 
 
-;; Partie 2
+;; Partie 2 (Modélisation des transvasements)
 ;; A)
 ;; 1) Les étages supérieurs suivent la couleur ou vide des étages inférieurs
 bigand $i in $ETATS:
