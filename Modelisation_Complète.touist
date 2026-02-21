@@ -1,9 +1,10 @@
 $k = 2
-$ETATS=[0..$k]
-$C=[vert, orange, bleu, rouge, rose]
-$ETAGES = [1..4]
-$t = [1..3]
+$ETATS=[0..$k]                  ;; États successifs du jeu (0, 1, 2)
+$C=[vert, orange, bleu, rouge, rose]  ;; Couleurs possibles dans les tubes
+$ETAGES = [1..4]                ;; Étages de chaque tube (positions)
+$t = [1..3]                      ;; Les tubes numérotés de 1 à 3
 
+;; Définition de l'état initial (état 0)
 p(0,1,1,vert)
 p(0,1,2,orange)
 p(0,1,3,vert)
@@ -20,8 +21,8 @@ p(0,3,3,vide)
 p(0,3,4,vide)
 
 
-;; Exercice 1
-;; 1)
+;; Partie 1
+;; 1) Chaque case contient une couleur ou vide
 bigand $i in $ETATS:
   bigand $j in $t:
     bigand $l in $ETAGES:
@@ -33,7 +34,7 @@ bigand $i in $ETATS:
 end
 
 
-;; 2)
+;; 2) Relations logiques entre couleurs différentes (exclusivité implicite)
 bigand $i in $ETATS:
   bigand $j in $t:
     bigand $l in $ETAGES:
@@ -47,7 +48,7 @@ bigand $i in $ETATS:
 end
 
 
-;; 3)
+;; 3) Si un étage est vide, tous les étages au-dessus doivent aussi être vides
 bigand $i in $ETATS:
   bigand $j in $t:
     bigand $k in $ETAGES when $k < 4:
@@ -57,13 +58,9 @@ bigand $i in $ETATS:
 end
 
 
-
-
-
-
-;; Exercice 2
+;; Partie 2
 ;; A)
-;; 1)
+;; 1) Les étages supérieurs suivent la couleur ou vide des étages inférieurs
 bigand $i in $ETATS:
   bigand $j in $t:
     bigand $m in $ETAGES when $m<4:  
@@ -74,22 +71,23 @@ bigand $i in $ETATS:
   end
 end  
 
-;; 2)
+;; 2) Modélisation d’un transvasement possible entre deux tubes
 bigand $i in $ETATS when $i > 0:
-  bigand $tsrc in $t:
-    bigand $tdest in $t when $tdest != $tsrc:
-      bigand $esrc in $ETAGES:
-        bigand $j in $C:
-          (bigand $edest in $ETAGES when $edest>1:
+  bigand $tsrc in $t:                 ;; tube source
+    bigand $tdest in $t when $tdest != $tsrc:  ;; tube destination
+      bigand $esrc in $ETAGES:       ;; étage source
+        bigand $j in $C:             ;; couleur à transvaser
+          (bigand $edest in $ETAGES when $edest>1:  
              verser($i,$tsrc,$esrc,$tdest,$edest,$j) => not p($i-1,$tsrc,$esrc,vide) and p($i-1,$tdest,$edest,vide) and (p($i-1,$tsrc,$esrc,$j) => p($i-1,$tdest,$edest-1,$j))
-           end) and  (verser($i,$tsrc,$esrc,$tdest,1,$j) => not p($i-1,$tsrc,$esrc,vide) and p($i-1,$tdest,1,vide) ) 
+           end) and  
+           (verser($i,$tsrc,$esrc,$tdest,1,$j) => not p($i-1,$tsrc,$esrc,vide) and p($i-1,$tdest,1,vide) ) 
         end
       end
     end
   end
 end
 
-;; 3)
+;; 3) Effet d’un transvasement sur l’état courant : mise à jour des cases source et destination
 bigand $i in $ETATS when $i > 0:
   bigand $tsrc in $t:
     bigand $tdest in $t when $tdest != $tsrc:
@@ -104,7 +102,7 @@ bigand $i in $ETATS when $i > 0:
   end
 end
 
-;; 4)
+;; 4) Détermination si un transvasement a eu lieu en comparant état précédent et courant
 bigand $i in $ETATS when $i > 0:
   bigand $tsrc in $t:
     bigand $tdest in $t when $tdest != $tsrc:
@@ -119,7 +117,7 @@ bigand $i in $ETATS when $i > 0:
   end
 end
 
-;; 5)
+;; 5) Vérifie que le tube source est vidé correctement après un transvasement
 bigand $i in $ETATS when $i > 0:
   bigand $tsrc in $t:
     bigand $tdest in $t when $tdest != $tsrc:
@@ -134,7 +132,7 @@ bigand $i in $ETATS when $i > 0:
   end
 end
 
-;; 6)
+;; 6) Conservation de l’état pour les cases non affectées par un transvasement
 bigand $i in $ETATS:
   bigand $j in $t:
     bigand $l in $ETAGES:
@@ -145,7 +143,7 @@ bigand $i in $ETATS:
   end
 end
 
-;; 7)
+;; 7) Assure qu’un même liquide ne peut être transvasé simultanément vers deux tubes différents
 bigand $i in $ETATS when $i > 0:
   bigand $tsrc in $t:
     bigand $tdest in $t when $tdest != $tsrc:
@@ -166,4 +164,4 @@ bigand $i in $ETATS when $i > 0:
       end
     end
   end
-end
+end  
