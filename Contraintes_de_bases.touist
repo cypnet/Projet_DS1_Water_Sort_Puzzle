@@ -4,7 +4,7 @@ $C=[vert, orange, bleu, rouge, rose]  ;; Couleurs possibles dans les tubes
 $ETAGES = [1..4]          ;; Les étages (positions) dans chaque tube
 $t = [1..3]                ;; Les tubes numérotés de 1 à 3
 
-;; Exercice 1
+;; Partie 1
 ;; 1)
 bigand $i in $ETATS:       ;; Pour chaque état du jeu
   bigand $j in $t:         ;; Pour chaque tube
